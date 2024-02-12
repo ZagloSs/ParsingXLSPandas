@@ -1,5 +1,7 @@
 import pandas as pd
 import json
+from datetime import date
+from openpyxl.workbook import Workbook
 
 employeesJson = open("employees.json")
 employeesData = json.load(employeesJson)
@@ -31,9 +33,27 @@ for employee in validEmployeesForXML:
     if employee['age'] < 30:
         employee['salary'] = addTenPercent(employee['salary'])
 
+salary = []
+age = []
+name = []
+gender = []
+proyect = []
+email = []
+for employee in validEmployeesForXML:
+    salary.append(employee['salary'])
+    age.append(employee['age'])
+    name.append(employee['name'])
+    gender.append(employee['gender'])
+    proyect.append(employee['proyect'])
+    email.append(employee['email'])
 
 
+pf = pd.DataFrame({"Salary": salary, "Age": age, "Name": name, "Gender": gender, "Proyect": proyect, "email": email})
+hoy = str(date.today())
+fecha = hoy.split("-")
 
 
+excelName = "pagos-empleados-" + fecha[1] + "-" + fecha[0]+".xlsx"
 
-print(validEmployeesForXML)
+pf.to_excel(excelName)
+
